@@ -1,16 +1,18 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Card, CardActions, CardContent, Typography, IconButton } from '@material-ui/core';
+import { Card, CardActions, CardContent, Typography, IconButton, Box } from '@material-ui/core';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import CreateIcon from '@material-ui/icons/Create';
+import NewReleasesIcon from '@material-ui/icons/NewReleases';
 
 const useStyles = makeStyles({
     card: {
         display: "flex",
         flexDirection: "column",
         height:"100%",
+        backgroundColor: "#dfe9e6"
     },
     cardContent: {
         display: "flex",
@@ -18,6 +20,7 @@ const useStyles = makeStyles({
         alignItems: "flex-end",
         justifyContent: "center",
         flexDirection: "column",
+        backgroundColor: "#fff",
         '&:hover': {
             backgroundColor: "#eff2f1",
             cursor: "pointer"
@@ -51,11 +54,24 @@ function ShoppingHubItem(props) {
     const classes = useStyles();
         return(
             <Card className={classes.card}>
+                <Box
+                display="block" 
+                align="left"
+                color={
+                    (props.item.completed ? "text.secondary" : 
+                    props.item.priority === 4 ? "secondary.main" : 
+                    props.item.priority === 3 ? "warning.main" : 
+                    props.item.priority === 2 ? "success.main" : "info.main")
+                } >
+
+                    <NewReleasesIcon fontSize="small" />
+                </Box>
                 <CardContent 
                 className={props.item.completed ? classes.cardContentcompleted : classes.cardContent}
                 onClick={() => {
                     props.onViewList(props.item)
                 }}>
+                    
                     <Typography color={props.item.completed ? "textSecondary" : "textPrimary"} variant="h5" component="h2" gutterBottom>
                     {props.item.name}
                     </Typography>
