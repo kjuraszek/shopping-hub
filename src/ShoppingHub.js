@@ -4,6 +4,7 @@ import Sidebar from './Sidebar';
 import Footer from './Footer';
 import ShoppingHubItem from './ShoppingHubItem';
 import ShoppingHubButton from './ShoppingHubButton';
+import ShoppingHubControls from './ShoppingHubControls';
 import AddShoppingListDialog from './AddShoppingListDialog';
 import ViewShoppingListDialog from './ViewShoppingListDialog';
 import EditShoppingListDialog from './EditShoppingListDialog';
@@ -20,7 +21,7 @@ const lists = [
     {name: "Amazon",
     id: 1,
     items: [{name:"SSD drive", completed:true},{name:"CDs", completed:false}],
-    priority: 1,
+    priority: 3,
     completed: false
     },
     {name: "Drugstore",
@@ -32,7 +33,7 @@ const lists = [
     {name: "Vegetables",
     id: 3,
     items: [{name:"Peppers * 2", completed:true},{name:"Onions * 3", completed:false},{name:"Cucumber", completed:true}],
-    priority: 3,
+    priority: 1,
     completed: false
     }
 ];
@@ -45,7 +46,9 @@ class ShoppingHub extends React.Component{
             addShoppingListDialog: false,
             viewShoppingListDialog: false,
             editShoppingListDialog: false,
-            selectedList: false
+            selectedList: false,
+            hideCompletedLists: false,
+            sortBy: "id"
         }
         this.addShoppingList = this.addShoppingList.bind(this);
         this.deleteShoppingList = this.deleteShoppingList.bind(this);
@@ -56,6 +59,8 @@ class ShoppingHub extends React.Component{
         this.toggleAddShoppingListDialog = this.toggleAddShoppingListDialog.bind(this);
         this.toggleViewShoppingListDialog = this.toggleViewShoppingListDialog.bind(this);
         this.toggleEditShoppingListDialog = this.toggleEditShoppingListDialog.bind(this);
+        this.toggleCompletedLists = this.toggleCompletedLists.bind(this);
+        this.toggleSorting = this.toggleSorting.bind(this);
     }
     addShoppingList(listAdded){
         let lists = this.state.lists;
@@ -126,6 +131,16 @@ class ShoppingHub extends React.Component{
             editShoppingListDialog: !state.editShoppingListDialog
         }));
     }
+    toggleCompletedLists(){
+        this.setState((state) => ({
+            hideCompletedLists: !state.hideCompletedLists
+        }));
+    }
+    toggleSorting(event){
+        this.setState((state) => ({
+            sortBy: event.target.value
+        }));
+    }
     render(){
         return(
             <React.Fragment>
@@ -136,15 +151,42 @@ class ShoppingHub extends React.Component{
                     <Grid item xs={12} sm={8} lg={9}>
                         <Container>
                         <h1>ShoppingHub</h1>
+                        <ShoppingHubControls 
+                        toggleCompletedLists={this.toggleCompletedLists}
+                        toggleSorting={this.toggleSorting}
+                        sortBy={this.state.sortBy}/>
                         {this.state.lists.length === 0 && <p>You have no shopping lists. Click a button below to add one!</p> }
                         <Grid container spacing={3}  alignItems="stretch" >
-                            {this.state.lists.map( 
-                                (item, index) => <Grid item xs={12} lg={4} key={index}>
-                                    <ShoppingHubItem item={item} 
-                                    onEditList={this.editShoppingList} 
-                                    onToggleList={this.toggleShoppingList} 
-                                    onViewList={this.viewShoppingList} 
-                                    onRemoveList={this.deleteShoppingList} />
+                            {this.state.lists.filter(
+                                // hide completed lists if set
+                                (item => !this.state.hideCompletedLists || !item.completed)).sort(
+                                    // sort lists by sortBy
+                                    (a,b) => {
+                                        if(this.state.sortBy === "priority"){
+                                            // sort by priority from highest
+                                            return b.priority - a.priority ;
+                                        } else if(this.state.sortBy === "completion"){
+                                            // sort by completion from false
+                                            return (a.completed === b.completed ? 0 : a.completed? 1 : -1); 
+                                        } else if(this.state.sortBy === "items"){
+                                            // sort by items length from highest
+                                            return b.items.length - a.items.length;
+                                        } else if(this.state.sortBy === "name"){
+                                            // sort by items name alphabetically
+                                            return a.name > b.name;
+                                        } else {
+                                            // sort by id by default
+                                            return a.id - b.id;
+                                        }
+                                    }
+                                ).map(
+                                    // finally map item data 
+                                    (item, index) => <Grid item xs={12} lg={4} key={index}>
+                                        <ShoppingHubItem item={item} 
+                                        onEditList={this.editShoppingList} 
+                                        onToggleList={this.toggleShoppingList} 
+                                        onViewList={this.viewShoppingList} 
+                                        onRemoveList={this.deleteShoppingList} />
                                 </Grid>)}
 
                                 <Grid item xs={12} lg={4} m={2} key={lists.length}>
