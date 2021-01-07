@@ -79,10 +79,12 @@ class ShoppingHub extends React.Component{
         this.setState((state) => ({
             lists: state.lists.map((list) => {
                 if(list.id !== listSaved.id ){
-                    console.log(":(");
                     return list;
                 } else {
-                    console.log("!!!!");
+                    // automatically complete list if all items are completed
+                    if(listSaved.items.filter( (item) => !item.completed).length === 0){
+                        listSaved.completed = true;
+                    }
                     return listSaved;
                 }
             })
