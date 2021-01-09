@@ -107,17 +107,17 @@ class AddShoppingListDialog extends React.Component{
                 </Select>
             </FormControl>
             {this.state.items.map( 
-                                (item, index) => <p>
-                                  <TextField 
-                                  key={index} 
+                                (item, index) => <div 
+                                  key={index}>
+                                  <TextField  
                                   label="Item" 
                                   value={item.name} 
                                   onChange={(event) => {this.handleItemChange(event, item)}}/>
-                                  <IconButton>
-                                    <DeleteIcon fontSize="small" onClick={() => {this.deleteItem(item)}}/>
+                                  <IconButton onClick={() => {this.deleteItem(item)}}>
+                                    <DeleteIcon fontSize="small"/>
                                 </IconButton>
-                                  </p>)}
-            <p>
+                                  </div>)}
+            <div>
             <TextField 
             name="tempItem" 
             value={this.state.tempItem} 
@@ -125,8 +125,8 @@ class AddShoppingListDialog extends React.Component{
             onChange={this.handleInputChange}/>
             <IconButton onClick={this.addNewItem}>
               <AddCircleIcon fontSize="small" />
-          </IconButton>
-            </p>
+            </IconButton>
+            </div>
 
         </DialogContent>
         <DialogActions>

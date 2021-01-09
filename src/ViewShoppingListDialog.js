@@ -25,11 +25,10 @@ class ViewShoppingListDialog extends React.Component{
           <br />
           {this.props.selectedList.items.length === 0 && <p>This list is empty.</p> }
             {this.props.selectedList.items.map( 
-                                (item, index) => <React.Fragment>
+                                (item, index) => <React.Fragment key={index}>
                                   <Typography 
                                   gutterBottom
-                                  color={item.completed ? "textSecondary" : "textPrimary"} 
-                                  key={index}>
+                                  color={item.completed ? "textSecondary" : "textPrimary"}>
                                     {item.completed ? <strike>{item.name}</strike> : item.name}
                                     </Typography>
                                   <Divider />

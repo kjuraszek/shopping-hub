@@ -28,7 +28,7 @@ const useStyles = makeStyles({
 function ShoppingHubButton(props) {
     const classes = useStyles();
         return(
-            <Card className={classes.card} onClick={props.onButtonClick} gutterBottom>
+            <Card className={classes.card} onClick={props.onButtonClick}>
                 <CardContent className={classes.cardContent}>
                     <Typography variant="h2" color="textSecondary" >
                     <AddCircleIcon fontSize="large" />
