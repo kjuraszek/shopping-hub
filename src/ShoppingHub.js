@@ -42,7 +42,7 @@ class ShoppingHub extends React.Component{
     constructor(){
         super();
         this.state = {
-            lists: lists,
+            lists: [...lists],
             addShoppingListDialog: false,
             viewShoppingListDialog: false,
             editShoppingListDialog: false,
@@ -64,7 +64,10 @@ class ShoppingHub extends React.Component{
     }
     addShoppingList(listAdded){
         let lists = this.state.lists;
-        listAdded.id = lists.length > 0 ? lists[lists.length - 1].id + 1 : 0;
+        listAdded.id = lists.length > 0 ? 
+        lists.sort(
+            (a,b) => b.id - a.id
+        )[0].id + 1 : 0;
         this.setState(state => ({
             lists: state.lists.concat([listAdded])
         }))       
@@ -82,8 +85,10 @@ class ShoppingHub extends React.Component{
                     return list;
                 } else {
                     // automatically complete list if all items are completed
-                    if( listSaved.items > 0 && listSaved.items.filter( (item) => !item.completed).length === 0){
+                    if( listSaved.items.length > 0 && listSaved.items.filter( (item) => !item.completed).length === 0){
                         listSaved.completed = true;
+                    } else {
+                        listSaved.completed = false;
                     }
                     return listSaved;
                 }
