@@ -213,7 +213,15 @@ class ShoppingHub extends React.Component{
                     </Container>
                     </Grid>
                     <Grid item xs={12} sm={4} lg={3}>
-                    <Sidebar />
+                    <Sidebar
+                    numberOfLists={this.state.lists.length}
+                    numberOfCompletedLists={this.state.lists.filter( (list) => list.completed ).length}
+                    numberOfItems={this.state.lists.reduce( (previousValue, currentList) => 
+                        previousValue + currentList.items.length, 0
+                    )} 
+                    longestList={this.state.lists.sort(
+                        (a,b) => b.items.length - a.items.length
+                    )[0]}/>
                     </Grid>
                 </Grid>
                 </Container>
