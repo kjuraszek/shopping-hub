@@ -82,7 +82,7 @@ class ShoppingHub extends React.Component{
                     return list;
                 } else {
                     // automatically complete list if all items are completed
-                    if(listSaved.items.filter( (item) => !item.completed).length === 0){
+                    if( listSaved.items > 0 && listSaved.items.filter( (item) => !item.completed).length === 0){
                         listSaved.completed = true;
                     }
                     return listSaved;
