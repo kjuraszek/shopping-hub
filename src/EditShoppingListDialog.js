@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, InputLabel, MenuItem, FormControl, Select, IconButton } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 
 class EditShoppingListDialog extends React.Component{
     constructor(props){
@@ -12,6 +13,7 @@ class EditShoppingListDialog extends React.Component{
         this.addNewItem = this.addNewItem.bind(this);
         this.deleteItem = this.deleteItem.bind(this);
         this.compareLists = this.compareLists.bind(this);
+        this.toggleItemCompletion = this.toggleItemCompletion.bind(this);
         
     }
     compareLists(oldList, newList){
@@ -51,6 +53,19 @@ class EditShoppingListDialog extends React.Component{
             } else {
                 let newItem = {...item};
                 newItem.name = event.target.value;
+                return newItem;
+            }
+        })
+    }));
+    };
+    toggleItemCompletion = (itemChanged) => {
+      this.setState((state) => ({
+        items: state.items.map((item) => { 
+            if(item !== itemChanged ){
+                return item;
+            } else {
+                let newItem = {...item};
+                newItem.completed = !item.completed;
                 return newItem;
             }
         })
@@ -116,16 +131,22 @@ class EditShoppingListDialog extends React.Component{
             {this.state.items.map( 
                                 (item, index) => <div
                                   key={index}>
-                                  <TextField 
+                                  <TextField
+                                  disabled={item.completed}
                                   label="Item" 
                                   value={item.name} 
                                   onChange={(event) => {this.handleItemChange(event, item)}}/>
                                   <IconButton onClick={() => {this.deleteItem(item)}}>
                                     <DeleteIcon fontSize="small" />
-                                </IconButton>
+                                  </IconButton>
+                                  <IconButton 
+                                  color={item.completed ? "inherit" : "default"}
+                                  onClick={() => {this.toggleItemCompletion(item)}}>
+                                      <AssignmentTurnedInIcon fontSize="small" />
+                                  </IconButton> 
                                   </div>)}
             <div>
-            <TextField 
+            <TextField
             name="tempItem" 
             value={this.state.tempItem} 
             label="Add item" 
