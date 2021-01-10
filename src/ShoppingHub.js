@@ -8,6 +8,7 @@ import ShoppingHubControls from './ShoppingHubControls';
 import AddShoppingListDialog from './AddShoppingListDialog';
 import ViewShoppingListDialog from './ViewShoppingListDialog';
 import EditShoppingListDialog from './EditShoppingListDialog';
+import ViewHelpDialog from './ViewHelpDialog';
 import { Container, Grid } from '@material-ui/core';
 
 // dummy-data
@@ -46,6 +47,7 @@ class ShoppingHub extends React.Component{
             addShoppingListDialog: false,
             viewShoppingListDialog: false,
             editShoppingListDialog: false,
+            viewHelpDialog: false,
             selectedList: false,
             hideCompletedLists: false,
             sortBy: "id"
@@ -59,6 +61,7 @@ class ShoppingHub extends React.Component{
         this.toggleAddShoppingListDialog = this.toggleAddShoppingListDialog.bind(this);
         this.toggleViewShoppingListDialog = this.toggleViewShoppingListDialog.bind(this);
         this.toggleEditShoppingListDialog = this.toggleEditShoppingListDialog.bind(this);
+        this.toggleViewHelpDialog = this.toggleViewHelpDialog.bind(this);
         this.toggleCompletedLists = this.toggleCompletedLists.bind(this);
         this.toggleSorting = this.toggleSorting.bind(this);
     }
@@ -138,6 +141,11 @@ class ShoppingHub extends React.Component{
             editShoppingListDialog: !state.editShoppingListDialog
         }));
     }
+    toggleViewHelpDialog(){
+        this.setState((state) => ({
+            viewHelpDialog: !state.viewHelpDialog
+        }));
+    }
     toggleCompletedLists(){
         this.setState((state) => ({
             hideCompletedLists: !state.hideCompletedLists
@@ -151,7 +159,9 @@ class ShoppingHub extends React.Component{
     render(){
         return(
             <React.Fragment>
-            <Header onButtonClick={this.toggleAddShoppingListDialog}/>
+            <Header 
+            addNewList={this.toggleAddShoppingListDialog}
+            viewHelp={this.toggleViewHelpDialog}/>
             <main>
                 <Container>
                 <Grid container>
@@ -214,7 +224,9 @@ class ShoppingHub extends React.Component{
                         toggleEditShoppingListDialog={this.toggleEditShoppingListDialog}
                         saveShoppingList={this.saveShoppingList} 
                         selectedList={this.state.selectedList ? this.state.selectedList : {name:"",items:[],completed:false,priority:1}}/>
-                        
+                        <ViewHelpDialog 
+                        viewHelpDialog={this.state.viewHelpDialog} 
+                        toggleViewHelpDialog={this.toggleViewHelpDialog} />
                     </Container>
                     </Grid>
                     <Grid item xs={12} sm={4} lg={3}>

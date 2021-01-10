@@ -39,13 +39,13 @@ class Header extends React.Component{
                     <MenuItem 
                     onClick={() => {
                         this.handleClose();
-                        this.props.onButtonClick()}}>
+                        this.props.addNewList()}}>
                             Add New List
                     </MenuItem>
                     <MenuItem 
                     onClick={() => {
                         this.handleClose();
-                        }}>
+                        this.props.viewHelp()}}>
                             Help
                     </MenuItem>
                 </Menu>
