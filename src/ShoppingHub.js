@@ -50,7 +50,8 @@ class ShoppingHub extends React.Component{
             viewHelpDialog: false,
             selectedList: false,
             hideCompletedLists: false,
-            sortBy: "id"
+            sortBy: "id",
+            reverseSorting: false
         }
         this.addShoppingList = this.addShoppingList.bind(this);
         this.deleteShoppingList = this.deleteShoppingList.bind(this);
@@ -64,6 +65,7 @@ class ShoppingHub extends React.Component{
         this.toggleViewHelpDialog = this.toggleViewHelpDialog.bind(this);
         this.toggleCompletedLists = this.toggleCompletedLists.bind(this);
         this.toggleSorting = this.toggleSorting.bind(this);
+        this.toggleReversedSorting = this.toggleReversedSorting.bind(this);
     }
     addShoppingList(listAdded){
         let lists = this.state.lists;
@@ -156,6 +158,11 @@ class ShoppingHub extends React.Component{
             sortBy: event.target.value
         }));
     }
+    toggleReversedSorting(){
+        this.setState((state) => ({
+            reverseSorting: !state.reverseSorting
+        }));
+    }
     render(){
         return(
             <React.Fragment>
@@ -171,6 +178,8 @@ class ShoppingHub extends React.Component{
                         <ShoppingHubControls 
                         toggleCompletedLists={this.toggleCompletedLists}
                         toggleSorting={this.toggleSorting}
+                        toggleReversedSorting={this.toggleReversedSorting}
+                        reverseSorting={this.state.reverseSorting}
                         sortBy={this.state.sortBy}/>
                         {this.state.lists.length === 0 && <p>You have no shopping lists. Click a button below to add one!</p> }
                         <Grid container spacing={3}  alignItems="stretch" >
@@ -181,19 +190,22 @@ class ShoppingHub extends React.Component{
                                     (a,b) => {
                                         if(this.state.sortBy === "priority"){
                                             // sort by priority from highest
-                                            return b.priority - a.priority ;
+                                            return (this.state.reverseSorting ? a.priority - b.priority : b.priority - a.priority);
                                         } else if(this.state.sortBy === "completion"){
                                             // sort by completion from false
-                                            return (a.completed === b.completed ? 0 : a.completed? 1 : -1); 
+                                            return ( this.state.reverseSorting ? 
+                                                (a.completed === b.completed ? 0 : a.completed? -1 : 1) :
+                                                (a.completed === b.completed ? 0 : a.completed? 1 : -1)
+                                                ); 
                                         } else if(this.state.sortBy === "items"){
                                             // sort by items length from highest
-                                            return b.items.length - a.items.length;
+                                            return (this.state.reverseSorting ? a.items.length - b.items.length : b.items.length - a.items.length);
                                         } else if(this.state.sortBy === "name"){
                                             // sort by items name alphabetically
-                                            return a.name > b.name;
+                                            return (this.state.reverseSorting ? b.name > a.name : a.name >= b.name);
                                         } else {
                                             // sort by id by default
-                                            return a.id - b.id;
+                                            return (this.state.reverseSorting ? b.id - a.id : a.id - b.id);
                                         }
                                     }
                                 ).map(

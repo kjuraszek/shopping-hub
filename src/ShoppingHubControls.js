@@ -23,6 +23,17 @@ function ShoppingHubControls(props) {
                 }
                 label="Hide completed lists"
                 />
+                <FormControlLabel
+                control={
+                    <Switch
+                    checked={props.reverseSorting}
+                    onChange={props.toggleReversedSorting}
+                    name="ReverseSorting"
+                    color="primary"
+                />
+                }
+                label="Reverse lists order"
+                />
             </Grid>
             <Grid item xs={12} md={6} >
                 <FormControl fullWidth>
@@ -37,7 +48,7 @@ function ShoppingHubControls(props) {
                     <MenuItem value="id">Id</MenuItem>
                     <MenuItem value="priority">Priority</MenuItem>
                     <MenuItem value="completion">Completion</MenuItem>
-                    <MenuItem value="items">Items</MenuItem>
+                    <MenuItem value="items">Items quantity</MenuItem>
                     <MenuItem value="name">Name</MenuItem>
                     </Select>
                 </FormControl>

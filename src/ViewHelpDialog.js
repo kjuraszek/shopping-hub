@@ -23,6 +23,7 @@ class ViewHelpDialog extends React.Component{
             <p>Add a new list with a <strong>Add New List</strong> button. List name and Priority fields are required. Priority value ranges from 1 (low priority) to 4 (high priority, complete ASAP).</p>
             <p>Each list has four control buttons to: view, edit, mark as completed and delete list. On the top of each list is located a small indicator - its color symbolizes priority of the list. By editing the list you can change its name and priority but also its items.</p>
             <p>You can hide completed lists with <strong>Hide completed lists</strong> switch.</p>
+            <p>You can reverse lists order with <strong>Reverse lists order</strong> switch.</p>
         </DialogContent>
         <DialogActions>
           <Button onClick={this.handleDialogClose} color="primary">
