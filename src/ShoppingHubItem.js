@@ -76,7 +76,7 @@ function ShoppingHubItem(props) {
                     {props.item.name}
                     </Typography>
                     <Typography color="textSecondary" gutterBottom>
-                    Items: {props.item.items.length}
+                    Items: {props.item.hasOwnProperty("items") ? props.item.items.length : 0}
                     </Typography>
                     <Typography  color="textSecondary" gutterBottom>
                     Priority: {props.item.priority}
