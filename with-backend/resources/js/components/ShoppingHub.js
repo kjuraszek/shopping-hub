@@ -12,6 +12,7 @@ import ViewHelpDialog from './ViewHelpDialog';
 import { Container, Box, Grid, CircularProgress } from '@material-ui/core';
 import HighlightOffSharpIcon from '@material-ui/icons/HighlightOffSharp';
 import axios from 'axios';
+import { withSnackbar } from 'notistack';
 
 class ShoppingHub extends React.Component{
     constructor(){
@@ -42,7 +43,9 @@ class ShoppingHub extends React.Component{
         this.toggleViewHelpDialog = this.toggleViewHelpDialog.bind(this);
         this.toggleCompletedLists = this.toggleCompletedLists.bind(this);
         this.toggleSorting = this.toggleSorting.bind(this);
-        this.toggleReversedSorting = this.toggleReversedSorting.bind(this);     
+        this.toggleReversedSorting = this.toggleReversedSorting.bind(this);       
+        this.showSuccessNotification = this.showSuccessNotification.bind(this);       
+        this.showErrorNotification = this.showErrorNotification.bind(this);       
     }
 
     componentDidMount () {
@@ -65,6 +68,7 @@ class ShoppingHub extends React.Component{
                     lists: lists,
                     loading_data: false
                 });
+                this.showSuccessNotification(`Successfully fetched ${this.state.lists.length} ${this.state.lists.length === 1 ? 'list' : 'lists'} from the database`); 
             })
             
         })
@@ -74,6 +78,7 @@ class ShoppingHub extends React.Component{
               errors: true,
               loading_data: false
             })
+            this.showErrorNotification("Error while connecting to the database"); 
         });
     }
 
@@ -89,10 +94,12 @@ class ShoppingHub extends React.Component{
                     lists: state.lists.concat([listAdded]),
                     loading_data: false
                 }));
+                this.showSuccessNotification(`Successfully added ${listAdded.name}`);
             });        
         })
         .catch(error => {
-            console.log(error); 
+            console.log(error);
+            this.showErrorNotification(`Error while adding ${listAdded.name}`); 
         });        
     }
     editShoppingList(listEdited){
@@ -123,10 +130,12 @@ class ShoppingHub extends React.Component{
                     }),
                     loading_data: false
                 }));
+                this.showSuccessNotification(`Successfully updated ${listSaved.name}`);
             });
         })
         .catch(error => {
             console.log(error);
+            this.showErrorNotification(`Error while updating ${listSaved.name}`);
         });
     }
     viewShoppingList(listViewed){
@@ -145,10 +154,12 @@ class ShoppingHub extends React.Component{
                     lists: state.lists.filter(list => list.id !== listDeleted.id ),
                     loading_data: false
                 }))
+                this.showSuccessNotification(`Successfully deleted ${listDeleted.name}`);
             });
         })
         .catch(error => {
             console.log(error);
+            this.showErrorNotification(`Error while deleting ${listDeleted.name}`);
         });
     }
     toggleShoppingList(listToggled){
@@ -174,10 +185,12 @@ class ShoppingHub extends React.Component{
                     }),
                     loading_data: false
                 }));
+                this.showSuccessNotification(`Successfully toggled ${listToggled.name}`);
             });
         })
         .catch(error => {
             console.log(error);
+            this.showErrorNotification(`Error while toggling ${listToggled.name}`);
         });
  
     }
@@ -215,6 +228,18 @@ class ShoppingHub extends React.Component{
         this.setState((state) => ({
             reverseSorting: !state.reverseSorting
         }));
+    }
+    showSuccessNotification(message){
+        this.props.enqueueSnackbar(message, {
+            variant: 'success',
+            autoHideDuration: 2500
+        });
+    }
+    showErrorNotification(message){
+        this.props.enqueueSnackbar(message, {
+            variant: 'error',
+            autoHideDuration: 2500
+        });
     }
     render(){
         return(
@@ -364,4 +389,4 @@ class ShoppingHub extends React.Component{
     }    
 }
 
-export default ShoppingHub;
+export default withSnackbar(ShoppingHub);
