@@ -5,8 +5,6 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import ReactDOM from 'react-dom'
 
-import './App.css';
-
 const useStyles = makeStyles({
   root: {
       display: "flex",
