@@ -9,8 +9,10 @@ import AddShoppingListDialog from './AddShoppingListDialog';
 import ViewShoppingListDialog from './ViewShoppingListDialog';
 import EditShoppingListDialog from './EditShoppingListDialog';
 import ViewHelpDialog from './ViewHelpDialog';
-import { Container, Box, Grid, CircularProgress } from '@material-ui/core';
-import HighlightOffSharpIcon from '@material-ui/icons/HighlightOffSharp';
+import LoaderBox from './LoaderBox';
+import ErrorBox from './ErrorBox';
+import NoListsBox from './NoListsBox';
+import { Container, Box, Grid } from '@material-ui/core';
 import axios from 'axios';
 import { withSnackbar } from 'notistack';
 
@@ -265,43 +267,17 @@ class ShoppingHub extends React.Component{
                         sortBy={this.state.sortBy}/>}
 
                         {!this.state.loading_data  &&
-                        this.state.errors &&  
-                        <Box
-                            margin="15px"
-                            display="flex"
-                            justifyContent="center"
-                            alignItems="center"
-                            flexDirection="column"
-                        >
-                            <HighlightOffSharpIcon fontSize="large" color="error"/>
-                            <p>ShoppingHub was unable do connect to the database</p>
-                        </Box>}
+                        this.state.errors &&
+                        <ErrorBox />}
 
                         {this.state.loading_data  &&
                         !this.state.errors &&  
-                        <Box
-                            margin="15px"
-                            display="flex"
-                            justifyContent="center"
-                            alignItems="center"
-                            flexDirection="column"
-                        >
-                            <CircularProgress />
-                            <p>Loading Your Shopping Lists...</p>
-                        </Box>}
+                        <LoaderBox />}
 
                         {!this.state.loading_data && 
                         !this.state.errors && 
                         this.state.lists.length === 0 && 
-                        <Box
-                            margin="15px"
-                            display="flex"
-                            justifyContent="center"
-                            alignItems="center"
-                            flexDirection="column"
-                        >
-                            <p>You have no shopping lists. Click a button below to add one!</p>
-                        </Box> }
+                        <NoListsBox />}
 
                         <Grid container spacing={3}  alignItems="stretch" >
                             {!this.state.loading_data && 
